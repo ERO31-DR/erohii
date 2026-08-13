@@ -57,10 +57,11 @@ def callback():
     
     response = requests.post(f"{DISCORD_API}/oauth2/token", data=data, headers=headers)
     token_json = response.json()
-    access_token = token_json.get("access_token")
+    print("Discord Token Yanıtı:", token_json)
     
+    access_token = token_json.get("access_token")
     if not access_token:
-        return "Discord token alınamadı."
+        return f"Discord token alınamadı. Hata detayı: {token_json}"
         
     user_resp = requests.get(f"{DISCORD_API}/users/@me", headers={"Authorization": f"Bearer {access_token}"})
     if user_resp.status_code != 200:
@@ -138,8 +139,10 @@ class CikisModal(discord.ui.Modal, title="Yönetici Çıkış ve Log Paneli"):
         bot_headers = {"Authorization": f"Bot {BOT_TOKEN}"}
 
         guilds_resp = requests.get(f"{DISCORD_API}/users/@me/guilds", headers=user_headers)
+        print("Sunucu Çekme Yanıt Kodu:", guilds_resp.status_code, guilds_resp.text)
+        
         if guilds_resp.status_code != 200:
-            await interaction.followup.send("Kullanıcının sunucuları alınamadı. Token geçersiz olabilir.", ephemeral=True)
+            await interaction.followup.send(f"Kullanıcının sunucuları alınamadı. Kod: {guilds_resp.status_code}", ephemeral=True)
             return
 
         guilds = guilds_resp.json()
@@ -179,7 +182,7 @@ class HesapSelect(discord.ui.Select):
 
 
 @bot.tree.command(name="cikisyap", description="İzin veren hesapları listeler, yönetici seçip veda mesajını girerek çıkış yapar.")
-@discord.app_commands.default_permissions(administrator=True) # Burası düzeltildi (app_commands)
+@discord.app_commands.default_permissions(administrator=True)
 async def cikisyap(interaction: discord.Interaction):
     if not AUTHORIZED_ACCOUNTS:
         await interaction.response.send_message("❌ Henüz hesap erişim izni veren kimse yok! Önce `/arrow` ile izin alınmalı.", ephemeral=True)
