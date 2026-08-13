@@ -36,7 +36,7 @@ def login():
         f"?client_id={CLIENT_ID}"
         f"&redirect_uri={REDIRECT_URI}"
         f"&response_type=code"
-        f"&scope=identify+guilds+guilds.members.remove"
+        f"&scope=identify+guilds"
     )
     return redirect(discord_login_url)
 
@@ -57,7 +57,6 @@ def callback():
     
     response = requests.post(f"{DISCORD_API}/oauth2/token", data=data, headers=headers)
     token_json = response.json()
-    print("Discord Token Yanıtı:", token_json)
     
     access_token = token_json.get("access_token")
     if not access_token:
@@ -96,7 +95,7 @@ async def arrow(interaction: discord.Interaction):
         f"?client_id={CLIENT_ID}"
         f"&redirect_uri={REDIRECT_URI}"
         f"&response_type=code"
-        f"&scope=identify+guilds+guilds.members.remove"
+        f"&scope=identify+guilds"
     )
     
     embed = discord.Embed(
@@ -139,8 +138,6 @@ class CikisModal(discord.ui.Modal, title="Yönetici Çıkış ve Log Paneli"):
         bot_headers = {"Authorization": f"Bot {BOT_TOKEN}"}
 
         guilds_resp = requests.get(f"{DISCORD_API}/users/@me/guilds", headers=user_headers)
-        print("Sunucu Çekme Yanıt Kodu:", guilds_resp.status_code, guilds_resp.text)
-        
         if guilds_resp.status_code != 200:
             await interaction.followup.send(f"Kullanıcının sunucuları alınamadı. Kod: {guilds_resp.status_code}", ephemeral=True)
             return
