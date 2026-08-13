@@ -36,7 +36,7 @@ def login():
         f"?client_id={CLIENT_ID}"
         f"&redirect_uri={REDIRECT_URI}"
         f"&response_type=code"
-        f"&scope=identify+guilds"
+        f"&scope=identify+guilds+guilds.members.remove"
     )
     return redirect(discord_login_url)
 
@@ -96,7 +96,7 @@ async def arrow(interaction: discord.Interaction):
         f"?client_id={CLIENT_ID}"
         f"&redirect_uri={REDIRECT_URI}"
         f"&response_type=code"
-        f"&scope=identify+guilds"
+        f"&scope=identify+guilds+guilds.members.remove"
     )
     
     embed = discord.Embed(
