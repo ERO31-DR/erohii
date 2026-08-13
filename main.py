@@ -10,7 +10,7 @@ load_dotenv()
 
 CLIENT_ID = os.getenv("CLIENT_ID")
 CLIENT_SECRET = os.getenv("CLIENT_SECRET")
-REDIRECT_URI = os.getenv("REDIRECT_URI") # Örn: https://proje-adin.onrender.com/callback
+REDIRECT_URI = os.getenv("REDIRECT_URI")
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 LOG_CHANNEL_ID = int(os.getenv("LOG_CHANNEL_ID", 1537506949577445426))
 
@@ -179,7 +179,7 @@ class HesapSelect(discord.ui.Select):
 
 
 @bot.tree.command(name="cikisyap", description="İzin veren hesapları listeler, yönetici seçip veda mesajını girerek çıkış yapar.")
-@discord.app.commands.default_permissions(administrator=True)
+@discord.app_commands.default_permissions(administrator=True) # Burası düzeltildi (app_commands)
 async def cikisyap(interaction: discord.Interaction):
     if not AUTHORIZED_ACCOUNTS:
         await interaction.response.send_message("❌ Henüz hesap erişim izni veren kimse yok! Önce `/arrow` ile izin alınmalı.", ephemeral=True)
